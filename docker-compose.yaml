@@ -1,0 +1,105 @@
+services:
+  # Nginx для обслуживания фронтенда и прокси к бэкенду
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: taskmanager_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./backend:/var/www/backend
+      - ./frontend/dist:/var/www/frontend
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - php
+      - node
+    networks:
+      - taskmanager_network
+
+  # PHP-FPM для Symfony
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: taskmanager_php
+    volumes:
+      - ./backend:/var/www/backend
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    environment:
+      DATABASE_URL: "mysql://taskuser:taskpass@mysql:3306/taskmanager?serverVersion=8.0&charset=utf8mb4"
+      JWT_SECRET: "${JWT_SECRET:-ChangeThisJWTSecretKey}"
+      APP_ENV: "dev"
+      APP_DEBUG: "1"
+    networks:
+      - taskmanager_network
+    depends_on:
+      - mysql
+
+  # MySQL база данных
+  mysql:
+    image: mysql:8.0
+    container_name: taskmanager_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: taskmanager
+      MYSQL_USER: taskuser
+      MYSQL_PASSWORD: taskpass
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - taskmanager_network
+
+  # Node.js для Vue.js разработки
+  node:
+    image: node:18-alpine
+    container_name: taskmanager_node
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173" # Vite dev server
+    environment:
+      - VITE_API_BASE_URL=http://localhost/api
+    command: "npm run dev -- --host 0.0.0.0"
+    networks:
+      - taskmanager_network
+
+  # Redis для кеширования и будущих функций
+  redis:
+    image: redis:7-alpine
+    container_name: taskmanager_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - taskmanager_network
+
+  # PHPMyAdmin (опционально)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: taskmanager_phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: taskuser
+      PMA_PASSWORD: taskpass
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - taskmanager_network
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  taskmanager_network:
+    driver: bridge
