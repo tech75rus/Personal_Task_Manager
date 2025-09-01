@@ -5,7 +5,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "5000:5000"
     volumes:
       - ./docker/nginx/dev/conf.d:/etc/nginx/conf.d
       - ./backend:/var/www/backend
@@ -44,13 +43,11 @@ services:
       MYSQL_PASSWORD: taskpass
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
     networks:
       - taskmanager_network
 
-  # PHPMyAdmin (опционально)
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: taskmanager_phpmyadmin
