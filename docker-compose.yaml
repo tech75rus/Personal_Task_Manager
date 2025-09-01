@@ -4,7 +4,6 @@ services:
     container_name: taskmanager_nginx
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./docker/nginx/dev/conf.d:/etc/nginx/conf.d
       - ./backend:/var/www/backend
@@ -43,8 +42,6 @@ services:
       MYSQL_PASSWORD: taskpass
     volumes:
       - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
     networks:
       - taskmanager_network
 
