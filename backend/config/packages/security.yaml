@@ -29,7 +29,7 @@ security:
             jwt: ~
             # refresh_jwt: ~  # Для refresh tokens
             refresh_jwt:
-                check_path: /api/token/refresh 
+                check_path: /api/token/refresh
             entry_point: jwt
 
     access_control:

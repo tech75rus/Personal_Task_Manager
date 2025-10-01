@@ -1,0 +1,4 @@
+lexik_jwt_authentication:
+    set_cookies:
+        token:
+            secure: false

@@ -2,3 +2,6 @@ gesdinet_jwt_refresh_token:
     ttl: 2592000  # 30 дней
     ttl_update: true
     user_identity_field: email
+    cookie:
+        enabled: true
+        secure: true
