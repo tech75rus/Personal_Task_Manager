@@ -3,11 +3,18 @@
             <div class="container mx-auto px-4 py-8 max-w-3xl">
         <!-- Заголовок -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-indigo-600 mb-2">Умный менеджер задач</h1>
+            <div class="flex flex-row">
+                <h1 class="text-4xl font-bold text-indigo-600 mb-2 flex-1">Умный менеджер задач</h1>
+                <div class="relative flex justify-center items-center flex-none mr-5">
+                    <i class="fa-solid fa-circle-user flex-none text-3xl text-gray-400 cursor-pointer focus:outline-none"></i>
+                    <div class="hidden absolute top-10 bg-white shadow-md rounded-lg m-2 w-[100px]">
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Гость</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Вход</a>
+                    </div>
+                </div>
+            </div>
             <p class="text-gray-600">Организуйте свою работу эффективно</p>
-            
         </header>
-
         <!-- Форма добавления задачи -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <form id="task-form" class="flex gap-2">
@@ -93,6 +100,8 @@ onMounted(() => {
     const clearCompletedBtn = document.getElementById('clear-completed');
     const tasksCount = document.getElementById('tasks-count');
     const notification = document.getElementById('notification');
+    const button = document.querySelector('.fa-circle-user');
+    const menu = document.querySelector('.hidden');
     
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     let currentFilter = 'all';
@@ -145,6 +154,18 @@ onMounted(() => {
         renderTasks();
         updateCounter();
         showNotification('Завершенные задачи удалены');
+    });
+
+    // Обработка клика для открытия меню
+    button.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+
+    // Закрытие меню при клике вне области
+    document.addEventListener('click', (event) => {
+        if (!button.contains(event.target) && !menu.contains(event.target)) {
+            menu.classList.add('hidden');
+        }
     });
 
     // Функция отрисовки задач
