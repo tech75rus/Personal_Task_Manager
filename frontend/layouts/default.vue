@@ -8,8 +8,12 @@
         crossorigin="anonymous"
       />
     </Head>
+    <div class="bg-gray-50 min-h-screen font-sans">
+      <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <NuxtPage />
+      </div>
+    </div>
   </Html>
-  <NuxtPage />
 </template>
 
 <script setup>

@@ -1,4 +1,5 @@
 lexik_jwt_authentication:
+    token_ttl: 120  # 2 минуты
     set_cookies:
         token:
             secure: false

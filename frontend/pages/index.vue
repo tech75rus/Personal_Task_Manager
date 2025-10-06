@@ -1,92 +1,89 @@
 <template>
-    <div class="bg-gray-50 min-h-screen font-sans">
-            <div class="container mx-auto px-4 py-8 max-w-3xl">
-        <!-- Заголовок -->
-        <header class="text-center mb-8">
-            <div class="flex flex-row">
-                <h1 class="text-4xl font-bold text-indigo-600 mb-2 flex-1">Умный менеджер задач</h1>
-                <div class="relative flex justify-center items-center flex-none mr-5">
-                    <i class="fa-solid fa-circle-user flex-none text-3xl text-gray-400 cursor-pointer focus:outline-none"></i>
-                    <div class="hidden absolute top-10 bg-white shadow-md rounded-lg m-2 w-[100px]">
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Гость</a>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Вход</a>
-                    </div>
+    <!-- Заголовок -->
+    <header class="text-center mb-8">
+        <div class="flex flex-row">
+            <h1 class="text-4xl font-bold text-indigo-600 mb-2 flex-1">Умный менеджер задач</h1>
+            <div class="relative flex justify-center items-center flex-none mr-5">
+                <i class="fa-solid fa-circle-user flex-none text-3xl text-gray-400 cursor-pointer focus:outline-none"></i>
+                <div class="hidden absolute top-10 bg-white shadow-md rounded-lg m-2 w-[100px]">
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Гость</a>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Вход</a>
                 </div>
             </div>
-            <p class="text-gray-600">Организуйте свою работу эффективно</p>
-        </header>
-        <!-- Форма добавления задачи -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <form id="task-form" class="flex gap-2">
-                <input 
-                    type="text" 
-                    id="task-input" 
-                    placeholder="Добавьте новую задачу..." 
-                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    required
-                >
-                <button 
-                    type="submit" 
-                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2"
-                >
-                    <i class="fas fa-plus"></i> Добавить
-                </button>
-            </form>
         </div>
-
-        <!-- Фильтры -->
-        <div class="flex justify-center mb-6">
-            <div class="bg-white rounded-lg shadow-md p-2 inline-flex">
-                <button 
-                    data-filter="all" 
-                    class="filter-btn px-4 py-2 rounded-md hover:bg-gray-100 transition active-filter bg-indigo-100 text-indigo-600"
-                >
-                    Все
-                </button>
-                <button 
-                    data-filter="active" 
-                    class="filter-btn px-4 py-2 rounded-md hover:bg-gray-100 transition"
-                >
-                    Активные
-                </button>
-                <button 
-                    data-filter="completed" 
-                    class="filter-btn px-4 py-2 rounded-md hover:bg-gray-100 transition"
-                >
-                    Завершенные
-                </button>
-            </div>
-        </div>
-
-        <!-- Статистика -->
-        <div class="flex justify-between items-center mb-4 px-2">
-            <div class="text-sm text-gray-500">
-                <span id="tasks-count">0</span> задач(и)
-            </div>
-            <button 
-                id="clear-completed" 
-                class="text-sm text-gray-500 hover:text-indigo-600 transition"
+        <p class="text-gray-600">Организуйте свою работу эффективно</p>
+    </header>
+    <!-- Форма добавления задачи -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <form id="task-form" class="flex gap-2">
+            <input 
+                type="text" 
+                id="task-input" 
+                placeholder="Добавьте новую задачу..." 
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
             >
-                Очистить завершенные
+            <button 
+                type="submit" 
+                class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2"
+            >
+                <i class="fas fa-plus"></i> Добавить
+            </button>
+        </form>
+    </div>
+
+    <!-- Фильтры -->
+    <div class="flex justify-center mb-6">
+        <div class="bg-white rounded-lg shadow-md p-2 inline-flex">
+            <button 
+                data-filter="all" 
+                class="filter-btn px-4 py-2 rounded-md hover:bg-gray-100 transition active-filter bg-indigo-100 text-indigo-600"
+            >
+                Все
+            </button>
+            <button 
+                data-filter="active" 
+                class="filter-btn px-4 py-2 rounded-md hover:bg-gray-100 transition"
+            >
+                Активные
+            </button>
+            <button 
+                data-filter="completed" 
+                class="filter-btn px-4 py-2 rounded-md hover:bg-gray-100 transition"
+            >
+                Завершенные
             </button>
         </div>
+    </div>
 
-        <!-- Список задач -->
-        <div id="task-list" class="bg-white rounded-lg shadow-md overflow-hidden">
-            <!-- Задачи будут добавляться здесь -->
-            <div id="empty-state" class="p-8 text-center">
-                <i class="fas fa-tasks text-4xl text-gray-300 mb-4"></i>
-                <h3 class="text-lg font-medium text-gray-500">Нет задач</h3>
-                <p class="text-gray-400">Добавьте свою первую задачу</p>
-            </div>
+    <!-- Статистика -->
+    <div class="flex justify-between items-center mb-4 px-2">
+        <div class="text-sm text-gray-500">
+            <span id="tasks-count">0</span> задач(и)
         </div>
+        <button 
+            id="clear-completed" 
+            class="text-sm text-gray-500 hover:text-indigo-600 transition"
+        >
+            Очистить завершенные
+        </button>
+    </div>
 
-        <!-- Уведомление -->
-        <div id="notification" class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hidden">
-            <span id="notification-message"></span>
+    <!-- Список задач -->
+    <div id="task-list" class="bg-white rounded-lg shadow-md overflow-hidden">
+        <!-- Задачи будут добавляться здесь -->
+        <div id="empty-state" class="p-8 text-center">
+            <i class="fas fa-tasks text-4xl text-gray-300 mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-500">Нет задач</h3>
+            <p class="text-gray-400">Добавьте свою первую задачу</p>
         </div>
     </div>
+
+    <!-- Уведомление -->
+    <div id="notification" class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hidden">
+        <span id="notification-message"></span>
     </div>
+
 </template>
 
 <script setup>
