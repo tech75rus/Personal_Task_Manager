@@ -5,14 +5,15 @@
             <h1 class="text-4xl font-bold text-indigo-600 mb-2 flex-1">Умный менеджер задач</h1>
             <div class="relative flex justify-center items-center flex-none mr-5">
                 <i class="fa-solid fa-circle-user flex-none text-3xl text-gray-400 cursor-pointer focus:outline-none"></i>
-                <div class="hidden absolute top-10 bg-white shadow-md rounded-lg m-2 w-[100px]">
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Гость</a>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Вход</a>
+                <div class="hidden-window hidden absolute bg-white shadow-md rounded-lg m-2 w-[130px]">
+                    <NuxtLink class="block px-4 py-2 hover:bg-gray-100 text-gray-700" to="/register">Регистрация</NuxtLink>
+                    <NuxtLink class="block px-4 py-2 hover:bg-gray-100 text-gray-700" to="/auth">Вход</NuxtLink>
                 </div>
             </div>
         </div>
         <p class="text-gray-600">Организуйте свою работу эффективно</p>
     </header>
+    
     <!-- Форма добавления задачи -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <form id="task-form" class="flex gap-2">
@@ -360,6 +361,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.hidden-window {
+    top: 40px;
+    right: -27px;
+}
 .task-item:hover .task-actions {
     opacity: 1;
 }
