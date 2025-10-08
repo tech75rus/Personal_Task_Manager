@@ -1,6 +1,4 @@
 export default defineNuxtPlugin(() => {
-    console.log('Plugin loaded');
-
     const $api = $fetch.create({
         baseURL: 'http://localhost/api',
     });
@@ -8,4 +6,10 @@ export default defineNuxtPlugin(() => {
     $api('/test').then((response) => {
         console.log(response);
     })
+
+    return {
+        provide: {
+            api: $api
+        }
+    }
 })
