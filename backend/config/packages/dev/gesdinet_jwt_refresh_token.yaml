@@ -1,4 +1,4 @@
 gesdinet_jwt_refresh_token:
-    ttl: 300  # 5 минут
+    ttl: 900  # 15 минут
     cookie:
         secure: false

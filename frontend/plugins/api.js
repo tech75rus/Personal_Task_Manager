@@ -1,9 +1,10 @@
 export default defineNuxtPlugin(() => {
     const $api = $fetch.create({
         baseURL: 'http://localhost/api',
+        credentials: 'include'
     });
 
-    $api('/test').then((response) => {
+    $api('/profile').then((response) => {
         console.log(response);
     })
 
