@@ -2,6 +2,7 @@
     <!-- Заголовок -->
     <header class="text-center mb-8">
         <div class="flex flex-row">
+            <!-- TODO : Переделать иконку, нужно что бы текст и заголовок были соседими иконки-->
             <h1 class="text-4xl font-bold text-indigo-600 mb-2 flex-1">Умный менеджер задач</h1>
             <div class="relative flex justify-center items-center flex-none mr-5">
                 <i class="fa-solid fa-circle-user flex-none text-3xl text-gray-400 cursor-pointer focus:outline-none"></i>

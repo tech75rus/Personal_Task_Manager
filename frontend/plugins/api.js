@@ -4,10 +4,16 @@ export default defineNuxtPlugin(() => {
         credentials: 'include'
     });
 
-    $api('/profile').then((response) => {
-        console.log(response);
-    })
-
+    $api('/profile').catch(err => {
+        if (err.status === 401) {
+            $api('/token/refresh').then(() => {
+                console.log('Token обновлен');
+            }).catch(err => {
+                console.log(err.data.message);
+            })
+        }
+    });
+    
     return {
         provide: {
             api: $api
