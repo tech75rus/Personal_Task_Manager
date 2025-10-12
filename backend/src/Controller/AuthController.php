@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Task;
 
 class AuthController extends AbstractController
 {
@@ -44,8 +45,15 @@ class AuthController extends AbstractController
         $user->setPassword(
             $passwordHasher->hashPassword($user, $data['password'])
         );
-        $user->setRoles(['ROLE_USER']);
-        
+
+        $task = new Task();
+        // Создаем пустую задачу для нового пользователя
+        $task->setTask('');
+
+        $task->setUser($user);
+        $user->setTask($task);
+
+        $entityManager->persist($task);
         $entityManager->persist($user);
         $entityManager->flush();
         

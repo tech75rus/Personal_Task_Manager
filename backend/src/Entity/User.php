@@ -31,6 +31,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Task $task = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -110,5 +113,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    public function getTask(): ?Task
+    {
+        return $this->task;
+    }
+
+    public function setTask(Task $task): static
+    {
+        // set the owning side of the relation if necessary
+        if ($task->getUser() !== $this) {
+            $task->setUser($this);
+        }
+
+        $this->task = $task;
+
+        return $this;
     }
 }
