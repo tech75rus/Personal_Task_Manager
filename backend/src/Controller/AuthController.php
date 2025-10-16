@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Task;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AuthController extends AbstractController
 {
@@ -22,23 +23,19 @@ class AuthController extends AbstractController
         EntityManagerInterface $entityManager
     ): JsonResponse
     {
-
-        // dd($request->request->get('email'));
-
         $data = json_decode($request->getContent(), true);
-        
         
         // Проверяем обязательные поля
         if (!isset($data['email']) || !isset($data['password'])) {
             return $this->json(['error' => 'Email and password are required'], Response::HTTP_BAD_REQUEST);
         }
-        
+
         // Проверяем, не существует ли уже пользователь
         $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
         if ($existingUser) {
             return $this->json(['error' => 'User already exists'], Response::HTTP_CONFLICT);
         }
-        
+
         // Создаем нового пользователя
         $user = new User();
         $user->setEmail($data['email']);
@@ -47,8 +44,8 @@ class AuthController extends AbstractController
         );
 
         $task = new Task();
-        // Создаем пустую задачу для нового пользователя
-        $task->setTask('');
+        // Создаем пустую задачу для нового пользователя и добавляем ковычки для корректного JSON
+        $task->setTask('""');
 
         $task->setUser($user);
         $user->setTask($task);
@@ -56,7 +53,7 @@ class AuthController extends AbstractController
         $entityManager->persist($task);
         $entityManager->persist($user);
         $entityManager->flush();
-        
+
         return $this->json([
             'message' => 'User registered successfully',
             'email' => $user->getEmail()
@@ -66,7 +63,7 @@ class AuthController extends AbstractController
     #[Route('/api/profile', name: 'api_profile', methods: ['GET'])]
     public function profile(): JsonResponse
     {
-        // Этот метод доступен только аутентифицированным пользователям
+        /** @var User $user */
         $user = $this->getUser();
         
         return $this->json([
@@ -74,6 +71,7 @@ class AuthController extends AbstractController
             'user' => [
                 'email' => $user->getUserIdentifier(),
                 'roles' => $user->getRoles(),
+                'tasks' => $user->getTask()->getTask(),
             ]
         ]);
     }

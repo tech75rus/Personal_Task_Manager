@@ -4,7 +4,11 @@ export default defineNuxtPlugin(() => {
         credentials: 'include'
     });
 
-    $api('/profile').catch(err => {
+    $api('/profile').then(res => {
+        console.log(res);
+        localStorage.setItem('tasks', res.user.tasks);
+        localStorage.setItem('roleUser', res.user.roles[0]);
+    }).catch(err => {
         if (err.status === 401) {
             $api('/token/refresh').then(() => {
                 console.log('Token обновлен');

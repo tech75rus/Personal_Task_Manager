@@ -89,6 +89,8 @@
 </template>
 
 <script setup>
+
+
 onMounted(() => {
     // Элементы DOM
     const taskForm = document.getElementById('task-form');
@@ -104,7 +106,7 @@ onMounted(() => {
     
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     let currentFilter = 'all';
-
+    
     // Инициализация
     renderTasks();
     updateCounter();
@@ -283,6 +285,9 @@ onMounted(() => {
 
     // Сохранение задач в localStorage
     function saveTasks() {
+        const { getTasks } = useTasks();
+        getTasks();
+
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
