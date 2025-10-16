@@ -1,13 +1,14 @@
 export const useTasks = () => {
     const { $api } = useNuxtApp();
 
-    const getTasks = async () => {
-        await $api('/test').then(res => {
-            console.log(res);
-        }).catch(err => {
-            console.log(err);
-        });
+    const saveTask = async (tasks) => {
+        await $api('save-task', {
+            method: 'POST',
+            body: {
+                taks: tasks
+            }
+        })
     }
 
-    return { getTasks }
+    return { saveTask }
 }

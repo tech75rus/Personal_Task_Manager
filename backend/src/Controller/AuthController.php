@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Task;
+use App\Repository\UserRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AuthController extends AbstractController
@@ -71,14 +72,18 @@ class AuthController extends AbstractController
             'user' => [
                 'email' => $user->getUserIdentifier(),
                 'roles' => $user->getRoles(),
-                'tasks' => $user->getTask()->getTask(),
+                'tasks' => json_decode($user->getTask()->getTask(), true),
             ]
         ]);
     }
 
-    #[Route('/api/test', name: 'api_test', methods: ['GET'])]
-    public function test(): Response
+    #[Route('/test', name: 'api_test', methods: ['GET'])]
+    public function test(UserRepository $userRepository): Response
     {
-        return $this->json(['message' => 'Hello World']);
+
+        $user = $userRepository->find(32);
+        return $this->json([
+            'tasks' => json_decode($user->getTask()->getTask(), true)
+        ]);
     }
 }

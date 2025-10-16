@@ -5,8 +5,9 @@ export default defineNuxtPlugin(() => {
     });
 
     $api('/profile').then(res => {
-        console.log(res);
-        localStorage.setItem('tasks', res.user.tasks);
+        const task = res.user.tasks;
+        task.taks = JSON.parse(task.taks);
+        localStorage.setItem('tasks', JSON.stringify(task.taks));
         localStorage.setItem('roleUser', res.user.roles[0]);
     }).catch(err => {
         if (err.status === 401) {

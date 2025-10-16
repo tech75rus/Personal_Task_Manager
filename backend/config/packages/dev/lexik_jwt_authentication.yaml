@@ -1,5 +1,5 @@
 lexik_jwt_authentication:
-    token_ttl: 600  # 10 минут
+    token_ttl: 1800  # 30 минут
     set_cookies:
         token:
             secure: false

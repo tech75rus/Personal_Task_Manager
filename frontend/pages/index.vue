@@ -285,10 +285,10 @@ onMounted(() => {
 
     // Сохранение задач в localStorage
     function saveTasks() {
-        const { getTasks } = useTasks();
-        getTasks();
+        const { saveTask } = useTasks();
 
         localStorage.setItem('tasks', JSON.stringify(tasks));
+        saveTask(JSON.stringify(tasks));
     }
 
     // Обновление счетчика задач
