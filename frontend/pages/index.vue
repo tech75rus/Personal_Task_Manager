@@ -91,7 +91,7 @@
 <script setup>
 
 
-onMounted(() => {
+onMounted(async () => {
     // Элементы DOM
     const taskForm = document.getElementById('task-form');
     const taskInput = document.getElementById('task-input');
@@ -103,8 +103,19 @@ onMounted(() => {
     const notification = document.getElementById('notification');
     const button = document.querySelector('.fa-circle-user');
     const menu = document.querySelector('.hidden');
+
+    const { apiGetTasks, apiSaveTask } = useTasks();
     
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let tasks = [];
+
+    try {
+        const response = await apiGetTasks();
+        tasks = response.task = JSON.parse(response.task.taks);
+    } catch {
+        console.log('Ошибка при загрузке задач из Базы данных');
+        tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    }
+
     let currentFilter = 'all';
     
     // Инициализация
@@ -283,12 +294,11 @@ onMounted(() => {
         return taskElement;
     }
 
-    // Сохранение задач в localStorage
+    // Сохранение задач в localStorage и Базу данных
     function saveTasks() {
-        const { saveTask } = useTasks();
-
         localStorage.setItem('tasks', JSON.stringify(tasks));
-        saveTask(JSON.stringify(tasks));
+        // Сохраняем задачи в Базу данных
+        apiSaveTask(JSON.stringify(tasks));
     }
 
     // Обновление счетчика задач

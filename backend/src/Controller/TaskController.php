@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api')]
 final class TaskController extends AbstractController
 {
-    #[Route('/save-task', name: 'app_task', methods: ['POST'])]
+    #[Route('/save-task', name: 'save_task', methods: ['POST'])]
     public function saveTask(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $res = $request->getContent();
@@ -24,6 +24,16 @@ final class TaskController extends AbstractController
 
         $em->flush();
 
-        return $this->json($res);
+        return $this->json('Task saved');
+    }
+
+    #[Route('/get-task', name: 'get_task', methods: ['GET'])]
+    public function getTask(EntityManagerInterface $em): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $task = $user->getTask();
+        return $this->json(['task' => json_decode($task->getTask(), true)]);
     }
 }

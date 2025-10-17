@@ -1,8 +1,8 @@
 export const useTasks = () => {
     const { $api } = useNuxtApp();
 
-    const saveTask = async (tasks) => {
-        await $api('save-task', {
+    const apiSaveTask = async (tasks) => {
+        await $api('/save-task', {
             method: 'POST',
             body: {
                 taks: tasks
@@ -10,5 +10,12 @@ export const useTasks = () => {
         })
     }
 
-    return { saveTask }
+    const apiGetTasks = async () => {
+        const response = await $api('/get-task', {
+            method: 'GET'
+        });
+        return response;
+    }
+
+    return { apiSaveTask, apiGetTasks }
 }
