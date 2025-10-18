@@ -6,7 +6,14 @@
             <h1 class="text-4xl font-bold text-indigo-600 mb-2 flex-1">Умный менеджер задач</h1>
             <div class="relative flex justify-center items-center flex-none mr-5">
                 <i class="fa-solid fa-circle-user flex-none text-3xl text-gray-400 cursor-pointer focus:outline-none"></i>
-                <div class="hidden-window hidden absolute bg-white shadow-md rounded-lg m-2 w-[130px]">
+                <div v-if="user" 
+                    :class="{'hidden-item': !hiddenMenu}"
+                    class="hidden-window absolute bg-white shadow-md rounded-lg m-2 w-[130px]">
+                    <NuxtLink class="block px-4 py-2 hover:bg-gray-100 text-gray-700" to="#">Выход</NuxtLink>
+                </div>
+                <div v-else 
+                    :class="{'hidden-item': !hiddenMenu}"
+                    class="hidden-window absolute bg-white shadow-md rounded-lg m-2 w-[130px]">
                     <NuxtLink class="block px-4 py-2 hover:bg-gray-100 text-gray-700" to="/register">Регистрация</NuxtLink>
                     <NuxtLink class="block px-4 py-2 hover:bg-gray-100 text-gray-700" to="/auth">Вход</NuxtLink>
                 </div>
@@ -89,6 +96,8 @@
 </template>
 
 <script setup>
+const user = ref(false);
+const hiddenMenu = ref(false)
 
 
 onMounted(async () => {
@@ -102,7 +111,6 @@ onMounted(async () => {
     const tasksCount = document.getElementById('tasks-count');
     const notification = document.getElementById('notification');
     const button = document.querySelector('.fa-circle-user');
-    const menu = document.querySelector('.hidden');
 
     const { apiGetTasks, apiSaveTask } = useTasks();
     
@@ -117,6 +125,10 @@ onMounted(async () => {
     }
 
     let currentFilter = 'all';
+
+    if(localStorage.getItem('roleUser') === 'ROLE_USER') {
+        user.value = true;
+    }
     
     // Инициализация
     renderTasks();
@@ -170,13 +182,14 @@ onMounted(async () => {
 
     // Обработка клика для открытия меню
     button.addEventListener('click', () => {
-        menu.classList.toggle('hidden');
+        hiddenMenu.value = !hiddenMenu.value // ✅ Управляем через реактивную переменную
+
     });
 
     // Закрытие меню при клике вне области
     document.addEventListener('click', (event) => {
-        if (!button.contains(event.target) && !menu.contains(event.target)) {
-            menu.classList.add('hidden');
+        if (!button.contains(event.target)) {
+            hiddenMenu.value = false
         }
     });
 
@@ -380,6 +393,9 @@ onMounted(async () => {
 .hidden-window {
     top: 40px;
     right: -27px;
+}
+.hidden-item {
+    opacity: 0;
 }
 .task-item:hover .task-actions {
     opacity: 1;

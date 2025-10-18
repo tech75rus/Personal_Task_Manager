@@ -3,6 +3,10 @@ export default defineNuxtPlugin(() => {
         baseURL: 'http://localhost/api',
         credentials: 'include'
     });
+    
+    if(process.client) {
+        localStorage.setItem('roleUser', 'Guest');
+    }
 
     $api('/profile').then(res => {
         const task = res.user.tasks;
