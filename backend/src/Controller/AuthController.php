@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +12,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Task;
 use App\Repository\UserRepository;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class AuthController extends AbstractController
 {
@@ -75,6 +74,28 @@ class AuthController extends AbstractController
                 'tasks' => json_decode($user->getTask()->getTask(), true),
             ]
         ]);
+    }
+
+    #[Route('/api/logout', name: 'api_logout', methods: ['GET'])]
+    public function logout(): Response
+    {
+        $clearJwtCookie = Cookie::create('token')
+            ->withValue('')
+            ->withExpires(time() - 3600)
+            ->withPath('/')
+            ->withHttpOnly(true);
+            
+        $clearRefreshCookie = Cookie::create('refresh_token')
+            ->withValue('') 
+            ->withExpires(time() - 2592000)
+            ->withPath('/')
+            ->withHttpOnly(true);
+
+        return new JsonResponse(
+            ['message' => 'Выход успешно выполнен'],
+            200,
+            ['Set-Cookie' => [$clearJwtCookie, $clearRefreshCookie]]
+        );
     }
 
     #[Route('/test', name: 'api_test', methods: ['GET'])]

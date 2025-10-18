@@ -9,7 +9,7 @@
                 <div v-if="user" 
                     :class="{'hidden-item': !hiddenMenu}"
                     class="hidden-window absolute bg-white shadow-md rounded-lg m-2 w-[130px]">
-                    <NuxtLink class="block px-4 py-2 hover:bg-gray-100 text-gray-700" to="#">Выход</NuxtLink>
+                    <span class="block px-4 py-2 hover:bg-gray-100 text-gray-700" @click="handleLogout">Выход</span>
                 </div>
                 <div v-else 
                     :class="{'hidden-item': !hiddenMenu}"
@@ -96,9 +96,14 @@
 </template>
 
 <script setup>
+const { logout } = useAuth();
 const user = ref(false);
-const hiddenMenu = ref(false)
+const hiddenMenu = ref(false);
 
+const handleLogout = async () => {
+    await logout();
+    user.value = false;
+}
 
 onMounted(async () => {
     // Элементы DOM
@@ -117,10 +122,13 @@ onMounted(async () => {
     let tasks = [];
 
     try {
+        if (localStorage.getItem('roleUser') === 'Guest') {
+            throw new Error('Пользователь не имеет доступа к задачам');
+        }
         const response = await apiGetTasks();
         tasks = response.task = JSON.parse(response.task.taks);
-    } catch {
-        console.log('Ошибка при загрузке задач из Базы данных');
+    } catch (error){
+        console.log(error.message);
         tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     }
 
@@ -394,6 +402,10 @@ onMounted(async () => {
     top: 40px;
     right: -27px;
 }
+.hidden-window span{
+    cursor: pointer;
+}
+
 .hidden-item {
     opacity: 0;
 }
